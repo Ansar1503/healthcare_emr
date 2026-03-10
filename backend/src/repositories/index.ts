@@ -1,0 +1,12 @@
+export { userRepository, UserRepository } from './user.repository';
+export { doctorRepository, DoctorRepository } from './doctor.repository';
+export { patientRepository, PatientRepository } from './patient.repository';
+export { appointmentRepository, AppointmentRepository } from './appointment.repository';
+export { auditLogRepository, AuditLogRepository } from './auditLog.repository';
+export { BaseRepository } from './base.repository';
+export type { IBaseRepository } from './base.repository';
+export type { IUserRepository } from './user.repository';
+export type { IDoctorRepository } from './doctor.repository';
+export type { IPatientRepository } from './patient.repository';
+export type { IAppointmentRepository } from './appointment.repository';
+export type { IAuditLogRepository } from './auditLog.repository';
