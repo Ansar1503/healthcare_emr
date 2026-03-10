@@ -9,7 +9,7 @@ interface Props {
 const ProtectedRoute = ({ allowedRoles }: Props) => {
   const { isAuthenticated, user, isLoading } = useAuth();
   const location = useLocation();
-
+  console.log({user,allowedRoles})
   if (isLoading) {
     return (
       <div className="loading-screen">

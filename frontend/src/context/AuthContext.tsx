@@ -84,11 +84,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const verify = async () => {
       if (!state.accessToken) {
-        dispatch({ type: "SET_LOADING", payload: false });
+        dispatch({ type: "LOGOUT" });
         return;
       }
       try {
-        await authService.getMe();
+        const { data } = await authService.getMe();
+        dispatch({
+          type: "LOGIN_SUCCESS",
+          payload: { user: data.data!, accessToken: state.accessToken! },
+        });
         dispatch({ type: "SET_LOADING", payload: false });
       } catch {
         dispatch({ type: "LOGOUT" });
@@ -117,9 +121,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = useCallback(async () => {
     try {
       await authService.logout();
-    } catch {
-      // ignore
-    }
+    } catch {}
     dispatch({ type: "LOGOUT" });
   }, []);
 

@@ -42,7 +42,10 @@ const LoginPage = () => {
   const [showPass, setShowPass] = useState(false);
 
   if (isAuthenticated && user) {
-    return <Navigate to={ROLE_REDIRECTS[user.role] ?? "/"} replace />;
+    console.log({ user, isAuthenticated });
+    return (
+      <Navigate to={ROLE_REDIRECTS[user.role] ?? "/unauthorized"} replace />
+    );
   }
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
@@ -77,7 +80,7 @@ const LoginPage = () => {
     setLoading(false);
 
     if (result.success) {
-      navigate(ROLE_REDIRECTS[result.role] ?? "/");
+      navigate(ROLE_REDIRECTS[result.role] ?? "/unauthorized");
     } else {
       setServerError(result.message);
     }
