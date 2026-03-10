@@ -1,7 +1,6 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import type { AxiosResponse } from 'axios';
+import { useState, useEffect, useCallback, useRef } from "react";
+import type { AxiosResponse } from "axios";
 
-// ── useApi — generic typed data fetching ─────────────────────────────────────
 interface UseApiReturn<T> {
   data: T | null;
   loading: boolean;
@@ -13,7 +12,7 @@ interface UseApiReturn<T> {
 export const useApi = <T>(
   apiFunc: (...args: unknown[]) => Promise<AxiosResponse<{ data?: T } | T>>,
   deps: unknown[] = [],
-  immediate = true
+  immediate = true,
 ): UseApiReturn<T> => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(immediate);
@@ -42,9 +41,10 @@ export const useApi = <T>(
       } catch (err) {
         if (isMounted.current) {
           const msg =
-            (err as { response?: { data?: { message?: string } } }).response?.data?.message ??
+            (err as { response?: { data?: { message?: string } } }).response
+              ?.data?.message ??
             (err as Error).message ??
-            'An error occurred';
+            "An error occurred";
           setError(msg);
         }
         throw err;
@@ -53,7 +53,7 @@ export const useApi = <T>(
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    deps
+    deps,
   );
 
   useEffect(() => {
@@ -64,7 +64,6 @@ export const useApi = <T>(
   return { data, loading, error, execute, setData };
 };
 
-// ── useDebounce ───────────────────────────────────────────────────────────────
 export const useDebounce = <T>(value: T, delay = 300): T => {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
   useEffect(() => {

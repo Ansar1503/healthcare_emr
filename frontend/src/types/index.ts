@@ -1,21 +1,26 @@
-// ── Enums ─────────────────────────────────────────────────────────────────────
-
-export type UserRole = 'super_admin' | 'doctor' | 'receptionist';
+export type UserRole = "super_admin" | "doctor" | "receptionist";
 
 export type AppointmentStatus =
-  | 'booked'
-  | 'arrived'
-  | 'completed'
-  | 'cancelled'
-  | 'no_show';
+  | "booked"
+  | "arrived"
+  | "completed"
+  | "cancelled"
+  | "no_show";
 
-export type Gender = 'male' | 'female' | 'other';
+export type Gender = "male" | "female" | "other";
 
-export type BloodGroup = 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-' | '';
+export type BloodGroup =
+  | "A+"
+  | "A-"
+  | "B+"
+  | "B-"
+  | "O+"
+  | "O-"
+  | "AB+"
+  | "AB-"
+  | "";
 
-export type SlotStatus = 'available' | 'booked' | 'break' | 'past';
-
-// ── Core entities ─────────────────────────────────────────────────────────────
+export type SlotStatus = "available" | "booked" | "break" | "past";
 
 export interface IUser {
   id: string;
@@ -52,7 +57,13 @@ export interface IPatient {
 export interface IAppointment {
   _id: string;
   doctor: { _id: string; name: string; department: string };
-  patient: { _id: string; name: string; mobile: string; age: number; gender: Gender };
+  patient: {
+    _id: string;
+    name: string;
+    mobile: string;
+    age: number;
+    gender: Gender;
+  };
   date: string;
   slotStart: string;
   slotEnd: string;
@@ -78,8 +89,6 @@ export interface ISlotStats {
   past: number;
 }
 
-// ── API responses ─────────────────────────────────────────────────────────────
-
 export interface IApiResponse<T = unknown> {
   success: boolean;
   message?: string;
@@ -96,8 +105,6 @@ export interface IPaginatedData<T> {
   };
 }
 
-// ── Auth state ────────────────────────────────────────────────────────────────
-
 export interface IAuthState {
   user: IUser | null;
   accessToken: string | null;
@@ -106,12 +113,10 @@ export interface IAuthState {
 }
 
 export type AuthAction =
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'LOGIN_SUCCESS'; payload: { user: IUser; accessToken: string } }
-  | { type: 'LOGOUT' }
-  | { type: 'SET_ERROR'; payload: string };
-
-// ── Service DTOs ──────────────────────────────────────────────────────────────
+  | { type: "SET_LOADING"; payload: boolean }
+  | { type: "LOGIN_SUCCESS"; payload: { user: IUser; accessToken: string } }
+  | { type: "LOGOUT" }
+  | { type: "SET_ERROR"; payload: string };
 
 export interface ILoginDTO {
   email: string;
@@ -131,7 +136,7 @@ export interface ICreatePatientDTO {
   name: string;
   mobile: string;
   age: number | string;
-  gender: Gender | '';
+  gender: Gender | "";
   bloodGroup?: BloodGroup;
   address?: string;
 }
@@ -146,8 +151,6 @@ export interface ICreateDoctorDTO {
   password: string;
 }
 
-// ── Slot page state ───────────────────────────────────────────────────────────
-
 export interface ISlotPageData {
   doctorId: string;
   doctorName: string;
@@ -159,8 +162,6 @@ export interface ISlotPageData {
   stats: ISlotStats;
   message?: string;
 }
-
-// ── Booking navigation state ──────────────────────────────────────────────────
 
 export interface IBookingNavState {
   doctorId: string;
