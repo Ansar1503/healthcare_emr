@@ -1,6 +1,3 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// Appointment routes
-// ─────────────────────────────────────────────────────────────────────────────
 import { Router } from 'express';
 import {
   getAppointments, createAppointment, updateAppointment,
@@ -16,8 +13,6 @@ import {
 
 const apptRouter = Router();
 apptRouter.use(authenticate);
-
-// Query params validated via Zod (coerces page/limit to numbers)
 apptRouter.get('/', validateQuery(appointmentQuerySchema), getAppointments);
 apptRouter.post('/', requireRole(['super_admin', 'receptionist']), validateBody(createAppointmentSchema), createAppointment);
 apptRouter.put('/:id', requireRole(['super_admin', 'receptionist']), validateBody(updateAppointmentSchema), updateAppointment);
@@ -25,10 +20,6 @@ apptRouter.delete('/:id', requireRole(['super_admin', 'receptionist']), deleteAp
 apptRouter.post('/:id/arrive', requireRole(['super_admin', 'receptionist']), markArrived);
 
 export { apptRouter };
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Slot routes
-// ─────────────────────────────────────────────────────────────────────────────
 import { Router as SlotRouter } from 'express';
 import { getSlots } from '../controllers/slot.controller';
 import { authenticate as auth, requireRole as role } from '../middlewares/auth.middleware';
@@ -40,10 +31,6 @@ slotRouter.use(auth);
 slotRouter.get('/', role(['super_admin', 'receptionist']), vq(slotQuerySchema), getSlots);
 
 export { slotRouter };
-
-// ─────────────────────────────────────────────────────────────────────────────
-// User / admin routes
-// ─────────────────────────────────────────────────────────────────────────────
 import { Router as UserRouter } from 'express';
 import { getUsers, createReceptionist, toggleUserActive } from '../controllers/user.controller';
 import { authenticate as authMw, requireRole as roleMw } from '../middlewares/auth.middleware';

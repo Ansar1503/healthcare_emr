@@ -1,13 +1,3 @@
-/**
- * auth.controller.ts
- *
- * FIXES:
- * - Body validation is now handled by Zod middleware (loginSchema) before this runs.
- *   The controller can trust req.body is a valid { email, password }.
- * - login() no longer needs its own null-check guard — Zod already rejected blanks.
- * - Token timing-safe: we no longer expose whether the email vs password was wrong
- *   in the HTTP layer (service already normalises to "Invalid email or password").
- */
 import type { Request, Response, NextFunction } from 'express';
 import { authService } from '../services/auth.service';
 import { setRefreshTokenCookie, clearRefreshTokenCookie } from '../utils/jwt.utils';
@@ -19,7 +9,6 @@ export const login = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Body already validated by Zod middleware — safe to destructure directly
     const { email, password } = req.body as LoginInput;
 
     const { user, accessToken, refreshToken } = await authService.login(email, password, req);

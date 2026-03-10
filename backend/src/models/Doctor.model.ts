@@ -17,7 +17,6 @@ export interface IDoctorDocument extends Document {
 
 export type IDoctorModel = Model<IDoctorDocument>;
 
-// ── Subdocument schemas ───────────────────────────────────────────────────────
 const breakSchema = new Schema<IBreakPeriod>(
   {
     startTime: { type: String, required: true },
@@ -41,7 +40,6 @@ const DEPARTMENTS: Department[] = [
   'Gastroenterology',
 ];
 
-// ── Schema ────────────────────────────────────────────────────────────────────
 const doctorSchema = new Schema<IDoctorDocument>(
   {
     name: {

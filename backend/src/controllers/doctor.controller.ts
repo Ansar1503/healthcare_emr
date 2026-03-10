@@ -1,12 +1,3 @@
-/**
- * doctor.controller.ts
- *
- * FIXES:
- * - Manual field checks removed — Zod schemas handle all validation.
- * - updateDoctor no longer blindly iterates 'allowedFields' — Zod .strict()
- *   already rejected unknown keys so we can spread the parsed body directly.
- * - Uses typed Zod inputs instead of loose casts.
- */
 import type { Request, Response, NextFunction } from 'express';
 import { doctorRepository } from '../repositories';
 import { doctorService } from '../services/doctor.service';
@@ -48,7 +39,6 @@ export const createDoctor = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Zod has already validated and typed the body
     const dto = req.body as CreateDoctorInput;
     const result = await doctorService.create(dto, req);
 
@@ -68,7 +58,6 @@ export const updateDoctor = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Zod .strict() already rejected unknown keys
     const updates = req.body as UpdateDoctorInput;
 
     const doctor = await doctorRepository.updateById(req.params.id, updates);

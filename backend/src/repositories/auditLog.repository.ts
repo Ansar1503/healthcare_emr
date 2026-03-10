@@ -14,10 +14,7 @@ export class AuditLogRepository
     super(AuditLogModel);
   }
 
-  /**
-   * Non-blocking audit entry creation.
-   * Errors are swallowed so audit failures never disrupt the main request flow.
-   */
+  
   async log(dto: IAuditLogDTO): Promise<void> {
     try {
       await this.model.create(dto);

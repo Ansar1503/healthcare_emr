@@ -1,7 +1,6 @@
 import type { FilterQuery, UpdateQuery, Document, Model, Types } from 'mongoose';
 import type { IPaginatedResult, IPaginationOptions } from '../types';
 
-// ── Generic repository contract ───────────────────────────────────────────────
 export interface IBaseRepository<TDocument extends Document> {
   findById(id: string | Types.ObjectId): Promise<TDocument | null>;
   findOne(filter: FilterQuery<TDocument>): Promise<TDocument | null>;
@@ -20,7 +19,6 @@ export interface IBaseRepository<TDocument extends Document> {
   countDocuments(filter: FilterQuery<TDocument>): Promise<number>;
 }
 
-// ── Abstract base implementation ──────────────────────────────────────────────
 export abstract class BaseRepository<TDocument extends Document>
   implements IBaseRepository<TDocument>
 {

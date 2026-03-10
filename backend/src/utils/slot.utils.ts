@@ -1,21 +1,6 @@
-/**
- * slot.utils.ts
- *
- * FIXES:
- * 1. BUG: isToday() used toISOString() which returns UTC date. In timezones ahead
- *    of UTC (e.g. IST UTC+5:30), midnight local time is still the previous UTC day.
- *    This caused slots to show as "past" on today when they shouldn't, or allowed
- *    past-date booking. Fixed with local date string construction.
- * 2. BUG: timeToMinutes() did no guard against malformed input — undefined split
- *    would produce NaN. Added a safe fallback.
- * 3. EDGE CASE: A slot that starts at exactly currentMinutes should NOT be shown as
- *    past — fixed from `current < currentMinutes` to `current + duration <= currentMinutes`.
- *    A slot is past only if it has already fully elapsed.
- */
-import type { IDoctorDocument } from '../models/Doctor.model';
-import type { IBreakPeriod, ISlot, ISlotValidationResult, SlotStatus } from '../types';
+import type { IDoctorDocument } from "../models/Doctor.model";
+import type { IBreakPeriod, ISlot, ISlotValidationResult, SlotStatus } from "../types";
 
-/** "HH:MM" → total minutes from midnight. Returns 0 on malformed input. */
 export const timeToMinutes = (timeStr: string): number => {
   if (!timeStr || !timeStr.includes(':')) return 0;
   const [hourStr, minStr] = timeStr.split(':');
@@ -25,7 +10,6 @@ export const timeToMinutes = (timeStr: string): number => {
   return hours * 60 + minutes;
 };
 
-/** minutes from midnight → "HH:MM" */
 export const minutesToTime = (totalMinutes: number): string => {
   const safeMinutes = Math.max(0, Math.floor(totalMinutes));
   const hours = Math.floor(safeMinutes / 60);
@@ -49,11 +33,6 @@ const getCurrentTimeInMinutes = (): number => {
   return now.getHours() * 60 + now.getMinutes();
 };
 
-/**
- * FIX: Use local date parts instead of toISOString() (which is UTC-based).
- * In UTC+5:30 (IST) at 01:00 local time, toISOString() returns the previous
- * UTC day, causing "today" detection to fail.
- */
 const getTodayLocalString = (): string => {
   const now = new Date();
   const yyyy = now.getFullYear();
@@ -64,9 +43,6 @@ const getTodayLocalString = (): string => {
 
 const isToday = (dateStr: string): boolean => dateStr === getTodayLocalString();
 
-/**
- * Generate time slots for a doctor on a given date.
- */
 export const generateSlots = (
   doctor: IDoctorDocument,
   date: string,
@@ -81,7 +57,6 @@ export const generateSlots = (
   const bookedSet = new Set(bookedSlots);
 
   const checkPast = isToday(date);
-  // FIX: add a 5-minute buffer so a slot that just started isn't immediately "past"
   const currentMinutes = checkPast ? getCurrentTimeInMinutes() : -1;
 
   const slots: ISlot[] = [];
@@ -93,8 +68,6 @@ export const generateSlots = (
     const endStr   = minutesToTime(end);
 
     const isDuringBreak = overlapsWithBreak(current, end, breaks);
-    // FIX: a slot is past only when it has fully elapsed (end <= currentMinutes),
-    // not when it merely started before now
     const isPast   = checkPast && end <= currentMinutes;
     const isBooked = bookedSet.has(startStr);
 
@@ -116,10 +89,6 @@ export const generateSlots = (
 
   return slots;
 };
-
-/**
- * Validate that a given slotStart/slotEnd pair fits this doctor's schedule.
- */
 export const validateSlot = (
   slotStart: string,
   slotEnd: string,

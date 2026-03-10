@@ -1,76 +1,73 @@
-import type { Types } from 'mongoose';
+import type { Types } from "mongoose";
 
-// ─────────────────────────────────────────────
-// Enums
-// ─────────────────────────────────────────────
-
-export type UserRole = 'super_admin' | 'doctor' | 'receptionist';
+export type UserRole = "super_admin" | "doctor" | "receptionist";
 
 export type AppointmentStatus =
-  | 'booked'
-  | 'arrived'
-  | 'completed'
-  | 'cancelled'
-  | 'no_show';
+  | "booked"
+  | "arrived"
+  | "completed"
+  | "cancelled"
+  | "no_show";
 
-export type Gender = 'male' | 'female' | 'other';
+export type Gender = "male" | "female" | "other";
 
-export type BloodGroup = 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-' | '';
+export type BloodGroup =
+  | "A+"
+  | "A-"
+  | "B+"
+  | "B-"
+  | "O+"
+  | "O-"
+  | "AB+"
+  | "AB-"
+  | "";
 
 export type Department =
-  | 'General Medicine'
-  | 'Cardiology'
-  | 'Orthopedics'
-  | 'Pediatrics'
-  | 'Gynecology'
-  | 'Neurology'
-  | 'Dermatology'
-  | 'Ophthalmology'
-  | 'ENT'
-  | 'Psychiatry'
-  | 'Radiology'
-  | 'Oncology'
-  | 'Urology'
-  | 'Nephrology'
-  | 'Gastroenterology';
+  | "General Medicine"
+  | "Cardiology"
+  | "Orthopedics"
+  | "Pediatrics"
+  | "Gynecology"
+  | "Neurology"
+  | "Dermatology"
+  | "Ophthalmology"
+  | "ENT"
+  | "Psychiatry"
+  | "Radiology"
+  | "Oncology"
+  | "Urology"
+  | "Nephrology"
+  | "Gastroenterology";
 
 export type AuditAction =
-  | 'LOGIN'
-  | 'LOGOUT'
-  | 'CREATE_DOCTOR'
-  | 'UPDATE_DOCTOR'
-  | 'DELETE_DOCTOR'
-  | 'CREATE_RECEPTIONIST'
-  | 'UPDATE_RECEPTIONIST'
-  | 'DELETE_RECEPTIONIST'
-  | 'CREATE_PATIENT'
-  | 'UPDATE_PATIENT'
-  | 'DELETE_PATIENT'
-  | 'CREATE_APPOINTMENT'
-  | 'UPDATE_APPOINTMENT'
-  | 'DELETE_APPOINTMENT'
-  | 'MARK_ARRIVED'
-  | 'MARK_COMPLETED'
-  | 'VIEW_APPOINTMENTS'
-  | 'GENERATE_SLOTS';
-
-// ─────────────────────────────────────────────
-// Subdocument interfaces
-// ─────────────────────────────────────────────
+  | "LOGIN"
+  | "LOGOUT"
+  | "CREATE_DOCTOR"
+  | "UPDATE_DOCTOR"
+  | "DELETE_DOCTOR"
+  | "CREATE_RECEPTIONIST"
+  | "UPDATE_RECEPTIONIST"
+  | "DELETE_RECEPTIONIST"
+  | "CREATE_PATIENT"
+  | "UPDATE_PATIENT"
+  | "DELETE_PATIENT"
+  | "CREATE_APPOINTMENT"
+  | "UPDATE_APPOINTMENT"
+  | "DELETE_APPOINTMENT"
+  | "MARK_ARRIVED"
+  | "MARK_COMPLETED"
+  | "VIEW_APPOINTMENTS"
+  | "GENERATE_SLOTS";
 
 export interface IBreakPeriod {
-  startTime: string; // "HH:MM"
-  endTime: string;   // "HH:MM"
+  startTime: string;
+  endTime: string;
 }
 
 export interface IWorkingHours {
-  startTime: string; // "HH:MM"
-  endTime: string;   // "HH:MM"
+  startTime: string;
+  endTime: string;
 }
-
-// ─────────────────────────────────────────────
-// Document interfaces (plain shape, no Mongoose overhead)
-// ─────────────────────────────────────────────
 
 export interface IUser {
   _id: Types.ObjectId;
@@ -119,9 +116,9 @@ export interface IAppointment {
   _id: Types.ObjectId;
   doctor: Types.ObjectId;
   patient: Types.ObjectId;
-  date: string;       // "YYYY-MM-DD"
-  slotStart: string;  // "HH:MM"
-  slotEnd: string;    // "HH:MM"
+  date: string;
+  slotStart: string;
+  slotEnd: string;
   status: AppointmentStatus;
   purpose?: string;
   notes?: string;
@@ -147,19 +144,14 @@ export interface IAuditLog {
   updatedAt: Date;
 }
 
-// ─────────────────────────────────────────────
-// Populated variants (used in query results)
-// ─────────────────────────────────────────────
-
-export interface IAppointmentPopulated extends Omit<IAppointment, 'doctor' | 'patient' | 'createdBy'> {
-  doctor: Pick<IDoctor, '_id' | 'name' | 'department'>;
-  patient: Pick<IPatient, '_id' | 'name' | 'mobile' | 'age' | 'gender'>;
-  createdBy: Pick<IUser, '_id' | 'name' | 'role'>;
+export interface IAppointmentPopulated extends Omit<
+  IAppointment,
+  "doctor" | "patient" | "createdBy"
+> {
+  doctor: Pick<IDoctor, "_id" | "name" | "department">;
+  patient: Pick<IPatient, "_id" | "name" | "mobile" | "age" | "gender">;
+  createdBy: Pick<IUser, "_id" | "name" | "role">;
 }
-
-// ─────────────────────────────────────────────
-// JWT payload
-// ─────────────────────────────────────────────
 
 export interface IJwtPayload {
   userId: string;
@@ -169,10 +161,6 @@ export interface IJwtPayload {
   doctorId?: string;
 }
 
-// ─────────────────────────────────────────────
-// Request augmentation
-// ─────────────────────────────────────────────
-
 export interface IAuthUser {
   userId: string;
   role: UserRole;
@@ -181,11 +169,7 @@ export interface IAuthUser {
   doctorId: string | null;
 }
 
-// ─────────────────────────────────────────────
-// Slot types
-// ─────────────────────────────────────────────
-
-export type SlotStatus = 'available' | 'booked' | 'break' | 'past';
+export type SlotStatus = "available" | "booked" | "break" | "past";
 
 export interface ISlot {
   slotStart: string;
@@ -206,10 +190,6 @@ export interface ISlotValidationResult {
   valid: boolean;
   reason?: string;
 }
-
-// ─────────────────────────────────────────────
-// Repository filter / pagination types
-// ─────────────────────────────────────────────
 
 export interface IPaginationOptions {
   page: number;
@@ -236,10 +216,6 @@ export interface IAppointmentFilters {
 export interface IPatientSearchFilters {
   query: string;
 }
-
-// ─────────────────────────────────────────────
-// Service input DTOs
-// ─────────────────────────────────────────────
 
 export interface ICreateAppointmentDTO {
   doctorId: string;
@@ -296,10 +272,6 @@ export interface IAuditLogDTO {
   ipAddress?: string;
   userAgent?: string;
 }
-
-// ─────────────────────────────────────────────
-// API Response envelope
-// ─────────────────────────────────────────────
 
 export interface IApiResponse<T = unknown> {
   success: boolean;

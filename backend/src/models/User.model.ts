@@ -2,7 +2,6 @@ import mongoose, { Schema, type Document, type Model } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import type { UserRole } from '../types';
 
-// ── Document interface (includes Mongoose Document methods) ──────────────────
 export interface IUserDocument extends Document {
   name: string;
   email: string;
@@ -14,14 +13,12 @@ export interface IUserDocument extends Document {
   lastLogin: Date | null;
   createdAt: Date;
   updatedAt: Date;
-  // Instance methods
+
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-// ── Model interface (for statics if needed) ──────────────────────────────────
 export type IUserModel = Model<IUserDocument>;
 
-// ── Schema ───────────────────────────────────────────────────────────────────
 const userSchema = new Schema<IUserDocument>(
   {
     name: {
@@ -71,7 +68,6 @@ const userSchema = new Schema<IUserDocument>(
   { timestamps: true }
 );
 
-// ── Hooks ─────────────────────────────────────────────────────────────────────
 userSchema.pre<IUserDocument>('save', async function (next) {
   if (!this.isModified('password')) return next();
   const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS ?? '12', 10);
@@ -79,7 +75,6 @@ userSchema.pre<IUserDocument>('save', async function (next) {
   next();
 });
 
-// ── Instance methods ──────────────────────────────────────────────────────────
 userSchema.methods.comparePassword = async function (
   this: IUserDocument,
   candidatePassword: string
@@ -94,9 +89,6 @@ userSchema.methods.toJSON = function (this: IUserDocument) {
   return obj;
 };
 
-// ── Indexes ───────────────────────────────────────────────────────────────────
-// email unique index is created by the unique:true in field definition — no duplicate needed.
-// Role index supports admin queries that filter by role.
 userSchema.index({ role: 1 });
 
 export const UserModel = mongoose.model<IUserDocument, IUserModel>('User', userSchema);

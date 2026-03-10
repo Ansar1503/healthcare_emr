@@ -22,7 +22,7 @@ export class UserRepository
     super(UserModel);
   }
 
-  /** Find user by email. Optionally include password + refreshToken fields. */
+  
   async findByEmail(
     email: string,
     includeSecrets = false
@@ -34,26 +34,26 @@ export class UserRepository
     return query.exec();
   }
 
-  /** Find user by ID and include hidden secrets (for token rotation). */
+  
   async findByIdWithSecrets(
     id: string | Types.ObjectId
   ): Promise<IUserDocument | null> {
     return this.model.findById(id).select('+refreshToken').exec();
   }
 
-  /** Get all users matching a given role. */
+  
   async findByRole(role: UserRole): Promise<IUserDocument[]> {
     return this.model.find({ role }).sort({ createdAt: -1 }).exec();
   }
 
-  /** Get all active users, optionally scoped by extra filter. */
+  
   async findActiveUsers(
     filter: FilterQuery<IUserDocument> = {}
   ): Promise<IUserDocument[]> {
     return this.model.find({ ...filter, isActive: true }).exec();
   }
 
-  /** Persist a new refresh token (or clear it on logout). */
+  
   async setRefreshToken(
     id: string | Types.ObjectId,
     token: string | null
@@ -63,7 +63,7 @@ export class UserRepository
       .exec();
   }
 
-  /** Stamp the lastLogin timestamp. */
+  
   async setLastLogin(id: string | Types.ObjectId): Promise<void> {
     await this.model
       .findByIdAndUpdate(id, { lastLogin: new Date() }, { validateBeforeSave: false })
@@ -79,5 +79,4 @@ export class UserRepository
   }
 }
 
-// Singleton instance
 export const userRepository = new UserRepository();

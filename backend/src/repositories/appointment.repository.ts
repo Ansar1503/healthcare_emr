@@ -50,7 +50,7 @@ export class AppointmentRepository
     super(AppointmentModel);
   }
 
-  /** Check if a specific slot is taken (used before booking). */
+  
   async findBySlot(
     doctorId: string | Types.ObjectId,
     date: string,
@@ -66,7 +66,7 @@ export class AppointmentRepository
       .exec();
   }
 
-  /** Returns only the slotStart strings of booked/active appointments — used by slot generator. */
+  
   async findBookedSlotStarts(
     doctorId: string | Types.ObjectId,
     date: string
@@ -79,7 +79,7 @@ export class AppointmentRepository
     return docs.map((d) => d.slotStart);
   }
 
-  /** Paginated appointment list with doctor/patient/creator populated. */
+  
   async findWithFiltersPopulated(
     filters: IAppointmentFilters,
     pagination: IPaginationOptions
@@ -125,7 +125,7 @@ export class AppointmentRepository
     return this.model.create(data);
   }
 
-  /** Find a single appointment with all refs populated. */
+  
   async findByIdPopulated(
     id: string | Types.ObjectId
   ): Promise<IAppointmentPopulated | null> {
@@ -137,7 +137,7 @@ export class AppointmentRepository
       .exec() as Promise<IAppointmentPopulated | null>;
   }
 
-  /** Atomic status transition with optional extra fields (e.g., arrivedAt). */
+  
   async setStatus(
     id: string | Types.ObjectId,
     status: AppointmentStatus,

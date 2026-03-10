@@ -20,7 +20,7 @@ export class PatientRepository
     super(PatientModel);
   }
 
-  /** Full-text + regex search across name and mobile fields. */
+  
   async search(
     query: string,
     pagination: IPaginationOptions

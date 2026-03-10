@@ -1,12 +1,3 @@
-/**
- * slot.controller.ts
- *
- * FIXES:
- * - Removed all manual query param validation — slotQuerySchema handles it.
- * - Removed past-date guard — it's a business rule in the service/util layer.
- * - No longer reconstructs doctor lean fields — repository returns typed document.
- * - Stats computation is still here (presentation concern, fine in controller).
- */
 import type { Request, Response, NextFunction } from 'express';
 import { doctorRepository, appointmentRepository } from '../repositories';
 import { generateSlots } from '../utils/slot.utils';
@@ -20,10 +11,8 @@ export const getSlots = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Validated by Zod: doctorId is a valid ObjectId, date is YYYY-MM-DD
     const { doctorId, date } = req.query as unknown as SlotQueryInput;
 
-    // Reject queries for past dates
     const today = new Date().toISOString().split('T')[0]!;
     if (date < today) throw new AppError('Cannot view slots for past dates', 400);
 

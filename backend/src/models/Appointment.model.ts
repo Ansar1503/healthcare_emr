@@ -4,9 +4,9 @@ import type { AppointmentStatus } from '../types';
 export interface IAppointmentDocument extends Document {
   doctor: mongoose.Types.ObjectId;
   patient: mongoose.Types.ObjectId;
-  date: string;      // "YYYY-MM-DD"
-  slotStart: string; // "HH:MM"
-  slotEnd: string;   // "HH:MM"
+  date: string;      
+  slotStart: string; 
+  slotEnd: string;   
   status: AppointmentStatus;
   purpose?: string;
   notes?: string;
@@ -46,7 +46,6 @@ const appointmentSchema = new Schema<IAppointmentDocument>(
   { timestamps: true }
 );
 
-// ── CRITICAL: Unique partial index — primary concurrency control ──────────────
 appointmentSchema.index(
   { doctor: 1, date: 1, slotStart: 1 },
   {
@@ -56,7 +55,6 @@ appointmentSchema.index(
   }
 );
 
-// ── Performance indexes ───────────────────────────────────────────────────────
 appointmentSchema.index({ doctor: 1, date: 1 });
 appointmentSchema.index({ patient: 1 });
 appointmentSchema.index({ status: 1 });
