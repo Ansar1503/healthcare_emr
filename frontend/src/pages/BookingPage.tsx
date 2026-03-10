@@ -18,6 +18,7 @@ const EMPTY_NEW_PATIENT: CreatePatientFormValues = {
   mobile: "",
   age: "",
   gender: "" as CreatePatientFormValues["gender"],
+  bloodGroup: "",
 };
 
 const BookingPage = () => {

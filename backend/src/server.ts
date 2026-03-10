@@ -13,8 +13,6 @@ import patientRoutes from "./routes/patient.routes";
 import { apptRouter, slotRouter, userRouter } from "./routes/remaining.routes";
 import { errorHandler, notFound } from "./middlewares/error.middleware";
 
-import "./types/express.d";
-
 const app = express();
 
 if (process.env.NODE_ENV === "production") {
