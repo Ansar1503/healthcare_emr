@@ -219,7 +219,7 @@ export const AppointmentsPage = () => {
                 <button
                   type="button"
                   style={s.saveBtn}
-                  onClick={() => void handleUpdate()}
+                  // onClick={() => void handleUpdate()}
                   disabled={!!actionLoading}
                 >
                   {actionLoading ? "Saving…" : "Save Changes"}
@@ -359,7 +359,7 @@ export const AppointmentsPage = () => {
                           <button
                             type="button"
                             style={s.actionBtn}
-                            onClick={() => openEditModal(appt)}
+                            // onClick={() => openEditModal(appt)}
                             disabled={isBusy}
                           >
                             Edit
